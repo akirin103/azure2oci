@@ -1,0 +1,7 @@
+#cloud-config
+timezone: Asia/Tokyo
+locale: ja_JP.s
+package_upgrade: true
+packages:
+  - net-tools
+  - traceroute
