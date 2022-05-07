@@ -38,10 +38,11 @@
     ```
     compartment_ocid = "ocid........"
     ```
-6. プロジェクトのルートディレクトリ下に`ssh`という名前のディレクトリを作成し、秘密鍵、公開鍵をそれぞれ`id_rsa`、`id_rsa.pub`というファイル名で配置します。
+6. プロジェクトのルートディレクトリ下に`ssh`という名前のディレクトリを作成し、秘密鍵、公開鍵をそれぞれ`id_rsa`、`id_rsa.pub`というファイル名で配置します。  
 
 7. 下記のコマンドを順に実行します。
-    ```
+
+    ```sh
     # 初期化処理
     $ terraform init
 
@@ -51,17 +52,27 @@
     # リソース作成(エラーを吐いた場合はメッセージに従って問題を解決してください)
     $ terraform apply --auto-approve
     ```
+
 <br />
+
+## 検証
+- tracerouteとifconfigコマンドはインストール済みです。
+
+
+    ```sh
+    # OCIのbastion(パブリックサーバ)にSSH接続
+    $ ssh ubuntu@<bastionのpublic-ip>
+
+    # プライベートサーバと疎通確認
+    ubuntu@azure2oci-public-instance:~$ ping <private-ip>
+
+    # 多段SSHでプライベートサーバにSSH接続
+    $ ssh -o ProxyCommand='ssh -W %h:%p ubuntu@<bastionのpublic-ip>' ubuntu@<プライベートサーバのprivate-ip>
+    ```
+
 
 ## 参考
 
-[Azure と Oracle Cloud Infrastructure 間の直接相互接続をセットアップする](https://docs.microsoft.com/ja-jp/azure/virtual-machines/workloads/oracle/configure-azure-oci-networking)
+- [Azure と Oracle Cloud Infrastructure 間の直接相互接続をセットアップする](https://docs.microsoft.com/ja-jp/azure/virtual-machines/workloads/oracle/configure-azure-oci-networking)  
 
-<br />
-
-## 仮想マシンで使用できるコマンド
-- traceroute
-- ifconfig
-
-コマンドが実行できない場合は、仮想マシン構築時に実行される`cloud-init`が失敗している可能性があります。  
-ログは`/var/log/cloud-init-output.log`で確認できます。  
+- [踏み台サーバ経由の多段SSH接続をローカル端末の秘密鍵のみで実施する](https://dev.classmethod.jp/articles/bastion-multi-stage-ssh-only-local-pem/)

@@ -3,9 +3,12 @@ variable "system_name" {
   default = "azure2oci"
 }
 # Microsoft Azure
+variable "vnet_cidr_block" {
+  default = "10.20.0.0/16"
+}
 # Oracle Cloud Inflastructure
 variable "vcn_cidr_block" {
-  default = "10.0.0.0/16"
+  default = "10.10.0.0/16"
 }
 
 variable "vcn_display_name" {
@@ -13,7 +16,11 @@ variable "vcn_display_name" {
 }
 
 variable "vcn_public_subnet_cidr_block" {
-  default = "10.0.0.0/24"
+  default = "10.10.0.0/24"
+}
+
+variable "vcn_private_subnet_cidr_block" {
+  default = "10.10.1.0/24"
 }
 
 variable "instance_shape" {
