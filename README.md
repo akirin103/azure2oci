@@ -56,9 +56,10 @@
 <br />
 
 ## 検証
-- tracerouteとifconfigコマンドはインストール済みです。
+- tracerouteとifconfigコマンドは`cloud-init`でインストール済み  
+インストールのログは`/var/log/cloud-init-output.log`を参照  
 
-
+- OCI側の動作確認
     ```sh
     # OCIのbastion(パブリックサーバ)にSSH接続
     $ ssh ubuntu@<bastionのpublic-ip>
@@ -70,6 +71,17 @@
     $ ssh -o ProxyCommand='ssh -W %h:%p ubuntu@<bastionのpublic-ip>' ubuntu@<プライベートサーバのprivate-ip>
     ```
 
+- Azure側の動作確認
+    ```sh
+    # Azureのbastion(パブリックサーバ)にSSH接続
+    $ ssh azureuser@<bastionのpublic-ip>
+
+    # プライベートサーバと疎通確認
+    azureuser@azure2oci-bastion-vm:~$ ping <private-ip>
+
+    # 多段SSHでプライベートサーバにSSH接続
+    $ ssh -o ProxyCommand='ssh -W %h:%p azureuser@<bastionのpublic-ip>' azureuser@<プライベートサーバのprivate-ip>
+    ```
 
 ## 参考
 
