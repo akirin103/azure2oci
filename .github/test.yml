@@ -1,0 +1,27 @@
+name: Terraform Test
+on:
+  pull_request:
+    branches:
+      - main
+jobs:
+  terraform:
+    name: Terraform
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: terraform fmt
+        id: fmt
+        run: terraform fmt
+        continue-on-error: true
+
+      - name: terraform validate
+        id: validate
+        run: terraform validate -no-color
+        continue-on-error: true
+
