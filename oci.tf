@@ -81,13 +81,13 @@ resource "oci_core_security_list" "private" {
   }
   ingress_security_rules {
     protocol    = "1"
-    source      = var.vnet_cidr_block
+    source      = var.vnet_address_space[0]
     source_type = "CIDR_BLOCK"
     stateless   = false
   }
   ingress_security_rules {
     protocol    = "6"
-    source      = var.vnet_cidr_block
+    source      = var.vnet_address_space[0]
     source_type = "CIDR_BLOCK"
     stateless   = false
     tcp_options {
