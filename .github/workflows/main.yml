@@ -13,10 +13,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      # - name: terraform fmt
-      #   run: terraform fmt
-      #   continue-on-error: true
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1
+      with:
+        terraform_version: 1.1.9
 
-      # - name: terraform validate
-      #   run: terraform validate -no-color
-      #   continue-on-error: true
+      - name: terraform fmt
+        run: terraform fmt
+        continue-on-error: true
+
+      - name: terraform validate
+        run: terraform validate -no-color
+        continue-on-error: true
