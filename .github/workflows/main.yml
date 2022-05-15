@@ -1,8 +1,8 @@
 name: Terraform
 on:
-  # pull_request:
-  #   branches:
-  #     - main
+  pull_request:
+    branches:
+      - main
   push:
     branches:
       - feature/*
@@ -23,8 +23,6 @@ jobs:
 
       - name: terraform fmt
         run: terraform fmt -check
-        # continue-on-error: true
 
       - name: terraform validate
         run: terraform validate -no-color
-        # continue-on-error: true
