@@ -5,7 +5,7 @@ on:
   #     - main
   push:
     branches:
-      - feature/#2_add_ci
+      - feature/*
 jobs:
   terraform:
     runs-on: ubuntu-latest
