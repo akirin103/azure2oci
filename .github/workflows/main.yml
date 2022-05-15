@@ -1,0 +1,28 @@
+name: Terraform
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - feature/*
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 1.1.9
+
+      - name: terraform init
+        run: terraform init
+
+      - name: terraform fmt
+        run: terraform fmt -check
+
+      - name: terraform validate
+        run: terraform validate -no-color
