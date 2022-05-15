@@ -4,7 +4,7 @@ resource "azurerm_resource_group" "this" {
 }
 
 module "vnet" {
-  source              = "Azure/vnet/azurerm"
+  source = "Azure/vnet/azurerm"
   version             = "2.6.0"
   resource_group_name = azurerm_resource_group.this.name
   vnet_name           = "${var.system_name}-vnet"
