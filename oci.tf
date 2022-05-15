@@ -2,20 +2,6 @@ data "oci_identity_availability_domains" "this" {
   compartment_id = var.compartment_ocid
 }
 
-data "template_file" "script" {
-  template = file("${path.module}/cloud-init.yml")
-}
-
-data "template_cloudinit_config" "config" {
-  gzip          = true
-  base64_encode = true
-
-  part {
-    content_type = "text/cloud-config"
-    content      = data.template_file.script.rendered
-  }
-}
-
 resource "oci_core_vcn" "this" {
   cidr_block     = var.vcn_cidr_block
   compartment_id = var.compartment_ocid
@@ -176,7 +162,7 @@ resource "oci_core_instance" "private" {
   shape               = var.instance_shape
   display_name        = "${var.system_name}-private-instance"
   create_vnic_details {
-    subnet_id = oci_core_subnet.private.id
+    subnet_id        = oci_core_subnet.private.id
     assign_public_ip = false
   }
   source_details {
