@@ -13,9 +13,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: terraform fmt
-        run: terraform fmt
-        continue-on-error: true
+      # - name: terraform fmt
+      #   run: terraform fmt
+      #   continue-on-error: true
 
       # - name: terraform validate
       #   run: terraform validate -no-color
