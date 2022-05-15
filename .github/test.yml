@@ -3,6 +3,7 @@ on:
   pull_request:
     branches:
       - main
+      - feature/#2_add_ci
 jobs:
   terraform:
     name: Terraform
