@@ -1,3 +1,4 @@
+// Used for User Data for VMs in Azure and OCI
 data "template_file" "script" {
   template = file("${path.module}/cloud-init.yml")
 }

@@ -126,3 +126,11 @@ resource "azurerm_public_ip" "this" {
   resource_group_name = azurerm_resource_group.this.name
   allocation_method   = "Dynamic"
 }
+
+output "azure_bastion_vm_public_ip" {
+  value = azurerm_linux_virtual_machine.bastion.public_ip_address
+}
+
+output "azure_server_vm_private_ip" {
+  value = azurerm_linux_virtual_machine.server.private_ip_address
+}

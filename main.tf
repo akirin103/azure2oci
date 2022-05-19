@@ -1,5 +1,3 @@
-variable "compartment_ocid" {}
-
 terraform {
   required_version = ">= 1.1.9"
 
@@ -13,7 +11,7 @@ terraform {
 
     oci = {
       source  = "oracle/oci"
-      version = "4.74.0"
+      version = "=4.74.0"
     }
   }
 }
