@@ -1,3 +1,5 @@
+variable "compartment_ocid" {}
+
 data "oci_identity_availability_domains" "this" {
   compartment_id = var.compartment_ocid
 }
@@ -175,6 +177,10 @@ resource "oci_core_instance" "private" {
   }
 }
 
-output "public_ip" {
+output "oci_public_instance_public_ip" {
   value = oci_core_instance.public.public_ip
+}
+
+output "oci_private_instance_private_ip" {
+  value = oci_core_instance.private.private_ip
 }

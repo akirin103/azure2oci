@@ -19,7 +19,7 @@
 
 <br />
 
-![Azure と Oracle Cloud Infrastructure 間の直接相互接続をセットアップする](./images.png)
+![Azure と Oracle Cloud Infrastructure 間の直接相互接続をセットアップする](https://user-images.githubusercontent.com/47296773/169279637-5a0b401b-6b47-4be3-9807-1c881ac0efc6.png)
 
 <br />
 
