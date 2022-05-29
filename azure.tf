@@ -104,7 +104,7 @@ resource "azurerm_network_interface" "bastion" {
     name                          = "public"
     subnet_id                     = module.vnet.vnet_subnets[0]
     private_ip_address_allocation = "Dynamic"
-    public_ip_address_id          = azurerm_public_ip.this.id
+    public_ip_address_id          = azurerm_public_ip.bastion-pip.id
   }
 }
 
@@ -120,11 +120,46 @@ resource "azurerm_network_interface" "server" {
   }
 }
 
-resource "azurerm_public_ip" "this" {
+resource "azurerm_public_ip" "bastion-pip" {
   name                = "${var.system_name}-bastion-pip"
   location            = azurerm_resource_group.this.location
   resource_group_name = azurerm_resource_group.this.name
   allocation_method   = "Dynamic"
+}
+
+resource "azurerm_public_ip" "vngw_ip" {
+  name                = "${var.system_name}-vngw-pip"
+  location            = azurerm_resource_group.this.location
+  resource_group_name = azurerm_resource_group.this.name
+  allocation_method   = "Dynamic"
+}
+
+resource "azurerm_virtual_network_gateway" "this" {
+  name                = "${var.system_name}-vngw"
+  location            = azurerm_resource_group.this.location
+  resource_group_name = azurerm_resource_group.this.name
+
+  type = "ExpressRoute"
+  sku  = "Standard"
+
+  ip_configuration {
+    name                 = "${var.system_name}-vngw-ip-config"
+    public_ip_address_id = azurerm_public_ip.vngw_ip.id
+    subnet_id            = module.vnet.vnet_subnets[2]
+  }
+}
+
+resource "azurerm_express_route_circuit" "this" {
+  name                  = "${var.system_name}-expressroute"
+  resource_group_name   = azurerm_resource_group.this.name
+  location              = azurerm_resource_group.this.location
+  service_provider_name = "Oracle Cloud FastConnect"
+  peering_location      = "Tokyo"
+  bandwidth_in_mbps     = "100"
+  sku {
+    tier   = "Standard"
+    family = "MeteredData"
+  }
 }
 
 output "azure_bastion_vm_public_ip" {
