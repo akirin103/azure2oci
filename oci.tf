@@ -1,6 +1,15 @@
 variable "compartment_ocid" {}
 
+locals {
+  azure_provider_service_index = index(data.oci_core_fast_connect_provider_services.this.fast_connect_provider_services.*.provider_service_name, "ExpressRoute")
+  azure_provider_service_ocid  = data.oci_core_fast_connect_provider_services.this.fast_connect_provider_services[local.azure_provider_service_index].id
+}
+
 data "oci_identity_availability_domains" "this" {
+  compartment_id = var.compartment_ocid
+}
+
+data "oci_core_fast_connect_provider_services" "this" {
   compartment_id = var.compartment_ocid
 }
 
@@ -108,6 +117,12 @@ resource "oci_core_route_table" "public" {
     destination_type  = "CIDR_BLOCK"
     network_entity_id = oci_core_internet_gateway.this.id
   }
+
+  route_rules {
+    destination       = var.vnet_address_space[0]
+    destination_type  = "CIDR_BLOCK"
+    network_entity_id = oci_core_drg.this.id
+  }
   vcn_id       = oci_core_vcn.this.id
   display_name = "${var.system_name}-public-rt"
 }
@@ -177,10 +192,38 @@ resource "oci_core_instance" "private" {
   }
 }
 
+resource "oci_core_virtual_circuit" "this" {
+  display_name         = "${var.system_name}-fast-connect"
+  compartment_id       = var.compartment_ocid
+  gateway_id           = oci_core_drg.this.id
+  type                 = "PRIVATE"
+  bandwidth_shape_name = "1 Gbps"
+
+  // ネットワーク体系が被らないようにリンクローカルアドレスを設定しておく
+  cross_connect_mappings {
+    customer_bgp_peering_ip = "169.254.0.2/30"
+  }
+
+  cross_connect_mappings {
+    customer_bgp_peering_ip = "169.254.0.6/30"
+  }
+  provider_service_id       = local.azure_provider_service_ocid
+  provider_service_key_name = azurerm_express_route_circuit.this.service_key
+
+  depends_on = [
+    azurerm_virtual_network_gateway.this,
+    azurerm_express_route_circuit.this,
+  ]
+}
+
 output "oci_public_instance_public_ip" {
   value = oci_core_instance.public.public_ip
 }
 
 output "oci_private_instance_private_ip" {
   value = oci_core_instance.private.private_ip
+}
+
+output "oci_core_fast_connect_provider_services" {
+  value = local.azure_provider_service_ocid
 }
