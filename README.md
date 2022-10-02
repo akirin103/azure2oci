@@ -83,8 +83,24 @@
     $ ssh -o ProxyCommand='ssh -W %h:%p azureuser@<bastionのpublic-ip>' azureuser@<プライベートサーバのprivate-ip>
     ```
 
+- AzureとOCI間のプライベート接続動作確認
+    ```
+    # OCI → Azureの接続確認
+    # 多段SSHでOCI側のプライベートサーバにSSH接続
+    $ ssh -o ProxyCommand='ssh -W %h:%p ubuntu@<bastionのpublic-ip>' ubuntu@<プライベートサーバのprivate-ip>
+    # 疎通確認
+    $ ping <Azure側のプライベートサーバのprivate-ip>
+
+    # Azure → OCI の接続確認
+    # 多段SSHでAzure側のプライベートサーバにSSH接続
+    $ ssh -o ProxyCommand='ssh -W %h:%p azureuser@<bastionのpublic-ip>' azureuser@<プライベートサーバのprivate-ip>
+    # 疎通確認
+    $ ping <OCI側のプライベートサーバのprivate-ip>
+    ```
 ## 参考
 
 - [Azure と Oracle Cloud Infrastructure 間の直接相互接続をセットアップする](https://docs.microsoft.com/ja-jp/azure/virtual-machines/workloads/oracle/configure-azure-oci-networking)  
 
 - [踏み台サーバ経由の多段SSH接続をローカル端末の秘密鍵のみで実施する](https://dev.classmethod.jp/articles/bastion-multi-stage-ssh-only-local-pem/)
+
+- [ルート テーブルの作成、変更、削除](https://learn.microsoft.com/ja-jp/azure/virtual-network/manage-route-table)

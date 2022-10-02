@@ -162,6 +162,19 @@ resource "azurerm_express_route_circuit" "this" {
   }
 }
 
+resource "azurerm_virtual_network_gateway_connection" "this" {
+  name                       = "${var.system_name}-con"
+  location                   = azurerm_resource_group.this.location
+  resource_group_name        = azurerm_resource_group.this.name
+  type                       = "ExpressRoute"
+  virtual_network_gateway_id = azurerm_virtual_network_gateway.this.id
+  express_route_circuit_id   = azurerm_express_route_circuit.this.id
+
+  depends_on = [
+    oci_core_virtual_circuit.this,
+  ]
+}
+
 output "azure_bastion_vm_public_ip" {
   value = azurerm_linux_virtual_machine.bastion.public_ip_address
 }
